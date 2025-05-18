@@ -46,7 +46,21 @@ namespace WebApplication1.Controllers
                 ModelState.AddModelError("", "Invalid credentials");
                 return View();
             }
+            else if (user.Role == "User")
+            {
 
+                var claims1 = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role)
+        };
+
+                var identity1 = new ClaimsIdentity(claims1, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal1 = new ClaimsPrincipal(identity1);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal1);
+                return RedirectToAction("Index", "Product");
+            }
             var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username),
@@ -57,7 +71,8 @@ namespace WebApplication1.Controllers
             var principal = new ClaimsPrincipal(identity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Index", "Account");
+           
         }
 
         public async Task<IActionResult> Logout()
@@ -69,6 +84,15 @@ namespace WebApplication1.Controllers
         {
 
             return View(_context.Users.ToList());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index()
+        {
+
+            var countadmin = _context.Users.Where(x => x.Role == "Admin").ToList().Count();
+            ViewData["adminount"] = countadmin;
+            return View();
         }
     }
 

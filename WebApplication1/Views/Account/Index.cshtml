@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>DashBoard</h1>
+
+<div class="row container">
+    <div class="col-md-3  border rounded-2 m-4" style="height:200px; ">
+        <h1>
+            Admin
+
+        </h1>
+        <span>
+            @{
+               var data= (int) ViewData["adminount"];
+                <h1 class="text-light"> @data</h1>
+            }
+        </span>
+    </div>
+    <div class="col-md-3 bg-primary border rounded-2 m-4" style="height:200px; ">
+        <h2>User</h2>
+    </div> 
+    <div class="col-md-3 bg-success border rounded-2 m-4" style="height:200px; ">
+        <h1>
+           Total Products
+        </h1>
+    </div>
+  
+</div>
+
+
